@@ -15,11 +15,11 @@ userRoutes.post("/signup",(req,res)=>{
     let {email,password,age}= req.body
     bcrypt.hash(password, 6, async function(err, hash) {
         if(err){
-            res.send({"Error:": "something error"})
+            res.status(500).send({"Error:": "something error"})
         }else{
             const newUser= new UserModel({email,password: hash,age})
             await newUser.save()
-            res.send({"message":"successfully registered"})
+            res.status(200).send({"message":"successfully registered"})
         }
     });
     
@@ -36,13 +36,13 @@ userRoutes.post("/login",async(req,res)=>{
 
         var token =  jwt.sign({userId: user._id}, process.env.JWT_SECRET);
         console.log(token)
-         res.send({
+         res.status(200).send({
             message: "login successful",
             token
          })
 
        }else{
-          res.send({"Error":"something error"})
+          res.status(500).send({"Error":"something error"})
        
        }
     });
